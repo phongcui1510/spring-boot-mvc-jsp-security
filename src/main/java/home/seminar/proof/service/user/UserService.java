@@ -15,5 +15,7 @@ public interface UserService {
     Collection<User> getAllUsers();
 
     User create(UserCreateForm form);
+    
+    void deleteUser(Long id);
 
 }

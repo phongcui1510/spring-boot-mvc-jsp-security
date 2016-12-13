@@ -40,7 +40,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public Collection<User> getAllUsers() {
         LOGGER.debug("Getting all users");
-        return userRepository.findAll(new Sort("email"));
+        return userRepository.findAll(new Sort("id"));
     }
 
     @Override
@@ -51,7 +51,13 @@ public class UserServiceImpl implements UserService {
         user.setEmail(form.getEmail());
         user.setPassword(new BCryptPasswordEncoder().encode(form.getPassword()));
         user.setRole(form.getRole());
+        user.setFullName(form.getFullName());
         return userRepository.save(user);
     }
+
+	@Override
+	public void deleteUser(Long id) {
+		userRepository.delete(id);
+	}
 
 }

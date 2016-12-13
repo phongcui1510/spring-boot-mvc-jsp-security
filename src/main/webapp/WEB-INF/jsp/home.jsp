@@ -6,17 +6,6 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf8">
 <title>Home</title>
 <link href="public/css/Admin.css" rel="stylesheet" type="text/css"/>
-<style type="text/css">
-	.link {
-	     background:none!important;
-	     border:none; 
-	     padding:0!important;
-	     font: inherit;
-	     /*border is optional*/
-	     border-bottom:1px solid #444; 
-	     cursor: pointer;
-	}
-</style>
 </head>
 <body>
 	<div class="nen">

@@ -2,8 +2,11 @@ package home.seminar.proof.controller;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.NoSuchElementException;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.slf4j.Logger;
@@ -20,8 +23,10 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import home.seminar.proof.domain.User;
 import home.seminar.proof.domain.UserCreateForm;
 import home.seminar.proof.domain.validator.UserCreateFormValidator;
 import home.seminar.proof.service.user.UserService;
@@ -60,6 +65,29 @@ public class UserController {
     public ModelAndView getUserCreatePage() {
         LOGGER.debug("Getting user create form");
         return new ModelAndView("user_create", "form", new UserCreateForm());
+    }
+    
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @RequestMapping(value = "/user/edit", method = RequestMethod.GET)
+    public ModelAndView getUserEditPage(@RequestParam("id") Long id) {
+        return new ModelAndView("user_create", "user", userService.getUserById(id)
+                .orElseThrow(() -> new NoSuchElementException(String.format("User=%s not found", id))));
+    }
+    
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @RequestMapping(value = "/user/delete", method = RequestMethod.GET)
+    public ModelAndView deleteUser(@RequestParam("id") Long id) {
+    	userService.deleteUser(id);
+    	List<User> users = (List<User>) userService.getAllUsers();
+        return new ModelAndView("user_list", "users", users);
+    }
+    
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @RequestMapping(value = "/user/list", method = RequestMethod.GET)
+    public ModelAndView listUser(HttpServletRequest request, HttpServletResponse response) {
+        LOGGER.debug("Getting all users");
+        List<User> users = (List<User>) userService.getAllUsers();
+        return new ModelAndView("user_list", "users", users);
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")

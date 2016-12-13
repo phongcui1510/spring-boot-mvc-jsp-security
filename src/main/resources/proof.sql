@@ -38,7 +38,7 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`id`, `username`, `password`, `fullName`, `phone`, `dob`, `role`) VALUES
-(1, 'admin', 'admin', '', '123456789','2016-12-02', 'ADMIN');
+(1, 'admin', '$2a$10$8j6usV/mz9NSESXmjmeV7eAwI6alCXtteViN5wCogRz7dSd10YuDS', '', '123456789','2016-12-02', 'ADMIN');
 
 --
 -- Indexes for dumped tables
