@@ -26,10 +26,11 @@ CREATE TABLE `proof` (
 CREATE TABLE `user` (
   `id` int(11) NOT NULL,
   `username` varchar(50) NOT NULL,
-  `password` varchar(50) NOT NULL,
-  `fullName` varchar(100) NULL,
+  `password` varchar(255) NOT NULL,
+  `email` varchar(100) DEFAULT NULL,
+  `full_name` varchar(100) DEFAULT NULL,
   `dob` date NOT NULL,
-  `phone` varchar(50) NULL,
+  `phone` varchar(50) DEFAULT NULL,
   `role` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -37,8 +38,8 @@ CREATE TABLE `user` (
 -- Dumping data for table `user`
 --
 
-INSERT INTO `user` (`id`, `username`, `password`, `fullName`, `phone`, `dob`, `role`) VALUES
-(1, 'admin', '$2a$10$8j6usV/mz9NSESXmjmeV7eAwI6alCXtteViN5wCogRz7dSd10YuDS', '', '123456789','2016-12-02', 'ADMIN');
+INSERT INTO `user` (`id`, `username`, `password`, `email`, `full_name`, `dob`, `phone`, `role`) VALUES
+(1, 'admin', '$2a$10$8j6usV/mz9NSESXmjmeV7eAwI6alCXtteViN5wCogRz7dSd10YuDS', 'phong@mail.com', 'Nguyen Thanh Phong', '2016-12-02', '123456789', 'ADMIN');
 
 --
 -- Indexes for dumped tables
@@ -69,4 +70,4 @@ ALTER TABLE `proof`
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
