@@ -36,6 +36,51 @@ public class Proof {
 	@Column(name = "created_by")
 	private String createdBy;
 	
+	@Column(name = "created_date")
+	private Date createdDate;
+	
+	@Column(name = "modified_by")
+	private String modifiedBy;
+	
+	@Column(name = "modified_date")
+	private Date modifiedDate;
+	
+	@Column(name = "parent_id")
+	private Long parentId;
+	
+	@Column(name = "type")
+	private String type;
+	
+	public String getType() {
+		return type;
+	}
+	public void setType(String type) {
+		this.type = type;
+	}
+	public Date getCreatedDate() {
+		return createdDate;
+	}
+	public void setCreatedDate(Date createdDate) {
+		this.createdDate = createdDate;
+	}
+	public Date getModifiedDate() {
+		return modifiedDate;
+	}
+	public void setModifiedDate(Date modifiedDate) {
+		this.modifiedDate = modifiedDate;
+	}
+	public Long getParentId() {
+		return parentId;
+	}
+	public void setParentId(Long parentId) {
+		this.parentId = parentId;
+	}
+	public String getModifiedBy() {
+		return modifiedBy;
+	}
+	public void setModifiedBy(String modifiedBy) {
+		this.modifiedBy = modifiedBy;
+	}
 	public Long getId() {
 		return id;
 	}

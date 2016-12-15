@@ -11,7 +11,7 @@
 					<a href="login">Đăng Nhập</a>
 				</c:if>
 				<c:if test="${currentUser != null}">
-					<form action="logout" method="post">
+					<form action="${context}/logout" method="post">
 						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 						Login as ${currentUser.role}
 <!-- 							<a style="float: right">Đăng Xuất</a> -->
@@ -28,6 +28,12 @@
 		<li><a href="Admin_TB.html"><b>Thông báo</b></a></li>
 		<c:if test="${currentUser != null &&  currentUser.role =='ADMIN'}">
 			<li><a href="${context}/user/list"><b>Quản lý tài khoản</b></a></li>
+		</c:if>
+		<c:if test="${currentUser != null &&  currentUser.role =='ADMIN'}">
+			<li><a href="${context}/proof/list"><b>Xem minh chứng</b></a></li>
+		</c:if>
+		<c:if test="${currentUser != null &&  currentUser.role =='ADMIN'}">
+			<li><a href="${context}/proof/create"><b>Tạo minh chứng</b></a></li>
 		</c:if>
 		<li><a href="Admin_NCV.html"><b>Nhập chức vụ</b></a></li>
 	</ul>

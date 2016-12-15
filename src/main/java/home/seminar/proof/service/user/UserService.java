@@ -17,5 +17,7 @@ public interface UserService {
     User create(UserCreateForm form);
     
     void deleteUser(Long id);
+    
+    User update(UserCreateForm form);
 
 }

@@ -10,6 +10,7 @@ import java.nio.file.Paths;
 import java.security.Principal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -30,6 +31,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import home.seminar.proof.domain.Proof;
 import home.seminar.proof.domain.ProofForm;
 import home.seminar.proof.service.proof.ProofService;
 
@@ -54,7 +56,12 @@ public class ProofController {
     @RequestMapping(value = "/proof/create", method = RequestMethod.GET)
 	public ModelAndView createProof(HttpServletRequest request, HttpServletResponse response) {
     	LOGGER.info("Redirect to proof creation form");
-        return new ModelAndView("proof_create", "form", new ProofForm());
+    	ProofForm form = new ProofForm();
+    	form.setAction(request.getContextPath()+"/proof/create");
+    	form.setHeader("THÊM MINH CHỨNG");
+    	List<Proof> proofs = proofService.findByType("BRANCH");
+    	form.setProofs(proofs);
+        return new ModelAndView("proof_create", "proof", form);
 	}
     
     @RequestMapping(value = "/proof/create", method = RequestMethod.POST)
@@ -101,6 +108,41 @@ public class ProofController {
     @RequestMapping(value = "/proof/view", method = RequestMethod.GET)
 	public ModelAndView viewProof(HttpServletRequest request, HttpServletResponse response, @RequestParam("id") Long id) {
     	ProofForm form = proofService.getProofById(id);
+    	if (form.getType().equalsIgnoreCase("BRANCH")) {
+    		List<Proof> proofs = proofService.findByParentId(form.getId());
+    		return new ModelAndView("proof_list", "proofs", proofs);
+    	}
     	return new ModelAndView("proof_view", "proof", form);
+    }
+    
+    @RequestMapping(value = "/proof/list", method = RequestMethod.GET)
+	public ModelAndView listProof(HttpServletRequest request, HttpServletResponse response) {
+    	List<Proof> proofs = proofService.findAllRoot();
+    	return new ModelAndView("proof_list", "proofs", proofs);
+    }
+    
+    @RequestMapping(value = "/proof/edit", method = RequestMethod.GET)
+	public ModelAndView redirectEditProof(HttpServletRequest request, HttpServletResponse response, @RequestParam("id") Long id) {
+    	ProofForm form = proofService.getProofById(id);
+    	form.setAction(request.getContextPath()+"/proof/edit");
+    	form.setHeader("CHỈNH SỬA MINH CHỨNG");
+    	List<Proof> proofs = proofService.findByType("BRANCH");
+    	form.setProofs(proofs);
+    	return new ModelAndView("proof_create", "proof", form);
+    }
+    
+    @RequestMapping(value = "/proof/delete", method = RequestMethod.GET)
+	public void deleteditProof(HttpServletRequest request, HttpServletResponse response, @RequestParam("id") Long id) {
+    	proofService.deleteProof(id);
+    }
+    
+    @RequestMapping(value = "/proof/edit", method = RequestMethod.POST)
+	public String editProof(HttpServletRequest request, HttpServletResponse response, @ModelAttribute("form") ProofForm form) {
+    	try {
+    		proofService.update(form);
+    	} catch (Exception e) {
+    		LOGGER.error("Error when updating proof", e);
+    	}
+    	return "redirect:/home";
     }
 }

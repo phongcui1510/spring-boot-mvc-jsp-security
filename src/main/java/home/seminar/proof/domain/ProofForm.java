@@ -1,6 +1,7 @@
 package home.seminar.proof.domain;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
 
@@ -14,7 +15,63 @@ public class ProofForm {
 	private Date startDate;
 	private Date endDate;
 	private String createdBy;
+	private Date createdDate;
+	private Date modifiedDate;
+	private String modifiedBy;
+	private Long parentId;
+	private String type;
+	private String action;
+	private String header;
+	private List<Proof> proofs;
 	
+	public String getType() {
+		return type;
+	}
+	public void setType(String type) {
+		this.type = type;
+	}
+	public List<Proof> getProofs() {
+		return proofs;
+	}
+	public void setProofs(List<Proof> proofs) {
+		this.proofs = proofs;
+	}
+	public String getHeader() {
+		return header;
+	}
+	public void setHeader(String header) {
+		this.header = header;
+	}
+	public String getAction() {
+		return action;
+	}
+	public void setAction(String action) {
+		this.action = action;
+	}
+	public Date getCreatedDate() {
+		return createdDate;
+	}
+	public void setCreatedDate(Date createdDate) {
+		this.createdDate = createdDate;
+	}
+	public Date getModifiedDate() {
+		return modifiedDate;
+	}
+	public void setModifiedDate(Date modifiedDate) {
+		this.modifiedDate = modifiedDate;
+	}
+	public String getModifiedBy() {
+		return modifiedBy;
+	}
+	public void setModifiedBy(String modifiedBy) {
+		this.modifiedBy = modifiedBy;
+	}
+	public Long getParentId() {
+		return parentId;
+	}
+	public void setParentId(Long parentId) {
+		this.parentId = parentId;
+	}
 	public String getCreatedBy() {
 		return createdBy;
 	}

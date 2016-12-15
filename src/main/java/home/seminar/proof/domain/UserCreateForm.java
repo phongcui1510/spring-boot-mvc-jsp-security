@@ -8,7 +8,7 @@ import javax.validation.constraints.NotNull;
 
 public class UserCreateForm {
 
-	private int id;
+	private Long id;
 	
 	@NotEmpty
 	private String username;
@@ -28,7 +28,26 @@ public class UserCreateForm {
     
     private String phone;
     
-    @NotNull
+    private String action;
+    private String header;
+    
+    public String getHeader() {
+		return header;
+	}
+
+	public void setHeader(String header) {
+		this.header = header;
+	}
+
+	public String getAction() {
+		return action;
+	}
+
+	public void setAction(String action) {
+		this.action = action;
+	}
+
+	@NotNull
     private Role role;
 
     public String getPhone() {
@@ -55,11 +74,13 @@ public class UserCreateForm {
 		this.dob = dob;
 	}
 
-	public int getId() {
+	
+
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 

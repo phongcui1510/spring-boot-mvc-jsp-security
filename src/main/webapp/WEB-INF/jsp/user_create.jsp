@@ -15,12 +15,13 @@
 	<div class="nen">
 		<jsp:include page="sidebar.jsp"></jsp:include>
 		<div class="noidung" align="center">
-			<h1 align="center">THÊM TÀI KHOẢN</h1>
-			<form name="form" action="${context}/user/create" method="post">
+			<h1 align="center">${user.header}</h1>
+			<form name="form" action="${user.action}" method="post">
 				<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+				<input type="hidden" name="id" value="${user.id}"><br>
 				<input type="text" name="username" placeholder="Tên Tài Khoản" class="keyword" required value="${user.username}"><br>
-				<input type="password" name="password" placeholder="Mật khẩu" class="keyword" required><br>
-				<input type="password" name="passwordRepeated" placeholder="Nhập lại mật khẩu" class="keyword"><br>
+				<input type="password" name="password" placeholder="Mật khẩu" class="keyword" required value="${user.password}"><br>
+				<input type="password" name="passwordRepeated" placeholder="Nhập lại mật khẩu" class="keyword" required value="${user.password}"><br>
 				<input type="text" name="fullName" placeholder="Tên người dùng" class="keyword" value="${user.fullName}"><br> 
 				<input type="text" name="email" placeholder="Email" class="keyword" required value="${user.email}"><br>
 				<input type="text" name="phone" placeholder="Phone" class="keyword" required value="${user.phone}"><br> 

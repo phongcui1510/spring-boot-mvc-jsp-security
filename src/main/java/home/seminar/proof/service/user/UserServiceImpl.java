@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import home.seminar.proof.domain.User;
 import home.seminar.proof.domain.UserCreateForm;
@@ -52,12 +53,40 @@ public class UserServiceImpl implements UserService {
         user.setPassword(new BCryptPasswordEncoder().encode(form.getPassword()));
         user.setRole(form.getRole());
         user.setFullName(form.getFullName());
+        user.setPhone(form.getPhone());
         return userRepository.save(user);
     }
 
 	@Override
 	public void deleteUser(Long id) {
 		userRepository.delete(id);
+	}
+
+	@Override
+	public User update(UserCreateForm form) {
+		User user = userRepository.findOne(form.getId());
+		if (!StringUtils.isEmpty(form.getFullName())) {
+			user.setFullName(form.getFullName());
+		}
+		if (!StringUtils.isEmpty(form.getUsername())) {
+			user.setUsername(form.getUsername());
+		}
+		if (!StringUtils.isEmpty(form.getEmail())) {
+			user.setEmail(form.getEmail());
+		}
+		if (!StringUtils.isEmpty(form.getPhone())) {
+			user.setPhone(form.getPhone());
+		}
+		if (!StringUtils.isEmpty(form.getPassword()) && !user.getPassword().equals(form.getPassword())) {
+			user.setPassword(new BCryptPasswordEncoder().encode(form.getPassword()));
+		}
+		if (!StringUtils.isEmpty(form.getRole())) {
+			user.setRole(form.getRole());
+		}
+		if (!StringUtils.isEmpty(form.getDob())) {
+			user.setDob(form.getDob());
+		}
+		return userRepository.save(user);
 	}
 
 }

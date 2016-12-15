@@ -34,10 +34,26 @@
 					<td><fmt:formatDate pattern="yyyy-MM-dd" value="${proof.endDate}" /></td>
 				</tr>
 				<tr>
+					<td style="width: 30%">Ngày tạo</td>
+					<td><fmt:formatDate pattern="yyyy-MM-dd" value="${proof.createdDate}" /></td>
+				</tr>
+				<tr>
+					<td style="width: 30%">Người tạo</td>
+					<td>${proof.createdBy}</td>
+				</tr>
+				<tr>
+					<td style="width: 30%">Người chỉnh sửa</td>
+					<td>${proof.modifiedBy}</td>
+				</tr>
+				<tr>
+					<td style="width: 30%">Ngày chỉnh sửa</td>
+					<td><fmt:formatDate pattern="yyyy-MM-dd" value="${proof.modifiedDate}" /></td>
+				</tr>
+				<tr>
 					<td style="width: 30%">File đính kèm</td>
 					<td>
-						<a href="${context}/proof/download?id=${proof.id}">Download</a>
-						<a href="#">View</a>
+						<a href="${context}/proof/download?id=${proof.id}" style="color: blue">Download</a>
+						<a href="#" style="color: blue">View</a>
 					</td>
 				</tr>
 			</table>

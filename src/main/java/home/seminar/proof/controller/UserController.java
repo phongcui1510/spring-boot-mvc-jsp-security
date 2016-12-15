@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -11,6 +12,7 @@ import javax.validation.Valid;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -62,16 +64,36 @@ public class UserController {
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @RequestMapping(value = "/user/create", method = RequestMethod.GET)
-    public ModelAndView getUserCreatePage() {
+    public ModelAndView getUserCreatePage(HttpServletRequest request, HttpServletResponse response) {
         LOGGER.debug("Getting user create form");
-        return new ModelAndView("user_create", "form", new UserCreateForm());
+        UserCreateForm form = new UserCreateForm();
+        form.setAction(request.getContextPath()+"/user/create");
+        form.setHeader("THÊM TÀI KHOẢN");
+        return new ModelAndView("user_create", "user", form);
     }
     
     @PreAuthorize("hasAuthority('ADMIN')")
     @RequestMapping(value = "/user/edit", method = RequestMethod.GET)
-    public ModelAndView getUserEditPage(@RequestParam("id") Long id) {
-        return new ModelAndView("user_create", "user", userService.getUserById(id)
-                .orElseThrow(() -> new NoSuchElementException(String.format("User=%s not found", id))));
+    public ModelAndView getUserEditPage(HttpServletRequest request, HttpServletResponse response, @RequestParam("id") Long id) {
+    	Optional<User> user = userService.getUserById(id);
+    	UserCreateForm form = new UserCreateForm();
+    	form.setHeader("CHỈNH SỬA TÀI KHOẢN");
+    	if (user.isPresent()) {
+    		BeanUtils.copyProperties(user.get(), form);
+    		form.setAction(request.getContextPath()+"/user/edit");
+    	}
+        return new ModelAndView("user_create", "user", form);
+    }
+    
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @RequestMapping(value = "/user/edit", method = RequestMethod.POST)
+    public String editUser(HttpServletRequest request, HttpServletResponse response, @ModelAttribute("form") UserCreateForm form) {
+    	try {
+    		userService.update(form);
+    	} catch (Exception e) {
+    		LOGGER.error("Error when updating user", e);
+    	}
+        return "redirect:/home";
     }
     
     @PreAuthorize("hasAuthority('ADMIN')")
@@ -104,7 +126,7 @@ public class UserController {
             // probably email already exists - very rare case when multiple admins are adding same user
             // at the same time and form validation has passed for more than one of them.
             LOGGER.warn("Exception occurred when trying to save the user, assuming duplicate email", e);
-            bindingResult.reject("email.exists", "Email already exists");
+            bindingResult.reject("username.exists", "Username already exists");
             return "user_create";
         }
         // ok, redirect

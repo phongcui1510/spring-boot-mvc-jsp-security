@@ -1,4 +1,3 @@
-
 --
 -- Table structure for table `proof`
 --
@@ -6,15 +5,15 @@
 CREATE TABLE `proof` (
   `id` int(11) NOT NULL,
   `title` varchar(50) NOT NULL,
-  `description` varchar(255) NOT NULL,
-  `file_path` varchar(255) NOT NULL,
+  `description` varchar(255) DEFAULT NULL,
+  `file_path` varchar(255) DEFAULT NULL,
   `created_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `created_by` int(11) NOT NULL,
-  `modified_by` int(11) NOT NULL,
-  `modified_date` datetime NOT NULL,
-  `start_time` datetime NOT NULL,
-  `end_time` datetime NOT NULL,
-  `parent_id` int(11) NOT NULL
+  `created_by` varchar(50) DEFAULT NULL,
+  `modified_by` varchar(50) DEFAULT NULL,
+  `modified_date` datetime DEFAULT NULL,
+  `start_time` datetime DEFAULT NULL,
+  `end_time` datetime DEFAULT NULL,
+  `parent_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -39,7 +38,8 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`id`, `username`, `password`, `email`, `full_name`, `dob`, `phone`, `role`) VALUES
-(1, 'admin', '$2a$10$8j6usV/mz9NSESXmjmeV7eAwI6alCXtteViN5wCogRz7dSd10YuDS', 'phong@mail.com', 'Nguyen Thanh Phong', '2016-12-02', '123456789', 'ADMIN');
+(1, 'admin', '$2a$10$8j6usV/mz9NSESXmjmeV7eAwI6alCXtteViN5wCogRz7dSd10YuDS', 'phong@mail.com', 'Nguyen Thanh Phong', '2016-12-02', '123456789', 'ADMIN'),
+(4, 'aaa', '$2a$10$KKYr3VMiaq64fXosr.vCs.uZJaJVAPYXpuliyDbs1dVvrtXWR3LzG', 'mrphongnt@gmail.com', 'aaa', '2016-12-21', NULL, 'USER4');
 
 --
 -- Indexes for dumped tables
@@ -70,4 +70,5 @@ ALTER TABLE `proof`
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
