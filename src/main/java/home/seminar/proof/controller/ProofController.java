@@ -95,13 +95,25 @@ public class ProofController {
         return "redirect:/home";
 	}
     
-   @RequestMapping(value="/proof/download", method= RequestMethod.GET, produces=MediaType.APPLICATION_OCTET_STREAM_VALUE)
-	public void getThumbnail (@RequestParam("id") Long id, HttpServletRequest request, HttpServletResponse response) throws IOException {
+    @RequestMapping(value="/proof/download", method= RequestMethod.GET, produces=MediaType.APPLICATION_OCTET_STREAM_VALUE)
+	public void getAttachment (@RequestParam("id") Long id, HttpServletRequest request, HttpServletResponse response) throws IOException {
     	ProofForm form = proofService.getProofById(id);
 		File file = new File(form.getFilePath());
 		FileInputStream is = new FileInputStream(file);
 		response.setContentType("application/octet-stream");
 		response.setHeader("Content-Disposition", "attachment; filename="+file.getName());
+		IOUtils.copy(is, response.getOutputStream());
+	}
+   
+    @RequestMapping(value="/proof/attachment/view", method= RequestMethod.GET)
+	public void viewAttachment (@RequestParam("id") Long id, HttpServletRequest request, HttpServletResponse response) throws IOException {
+   	ProofForm form = proofService.getProofById(id);
+		File file = new File(form.getFilePath());
+		FileInputStream is = new FileInputStream(file);
+		if (file.getName().contains(".pdf")) {
+			response.setContentType("application/pdf");
+		}
+		response.setHeader("Content-Disposition", "inline; filename="+file.getName());
 		IOUtils.copy(is, response.getOutputStream());
 	}
     
