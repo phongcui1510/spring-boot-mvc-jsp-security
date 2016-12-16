@@ -53,7 +53,7 @@
 					<td style="width: 30%">File đính kèm</td>
 					<td>
 						<a href="${context}/proof/download?id=${proof.id}" style="color: blue">Download</a>
-						<a href="#" style="color: blue">View</a>
+						<a href="${context}/proof/attachment/view?id=${proof.id}" style="color: blue">View</a>
 					</td>
 				</tr>
 			</table>
