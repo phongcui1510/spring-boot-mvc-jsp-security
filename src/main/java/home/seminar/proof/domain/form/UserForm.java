@@ -1,12 +1,14 @@
-package home.seminar.proof.domain;
+package home.seminar.proof.domain.form;
 
 import org.hibernate.validator.constraints.NotEmpty;
+
+import home.seminar.proof.domain.enumeration.Role;
 
 import java.util.Date;
 
 import javax.validation.constraints.NotNull;
 
-public class UserCreateForm {
+public class UserForm {
 
 	private Long id;
 	

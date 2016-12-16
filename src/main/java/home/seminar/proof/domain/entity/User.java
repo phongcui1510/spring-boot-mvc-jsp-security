@@ -1,9 +1,11 @@
-package home.seminar.proof.domain;
+package home.seminar.proof.domain.entity;
 
 import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.*;
+
+import home.seminar.proof.domain.enumeration.Role;
 
 @Entity
 @Table(name = "user")

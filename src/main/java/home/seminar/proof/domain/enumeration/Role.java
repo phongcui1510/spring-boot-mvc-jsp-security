@@ -1,4 +1,4 @@
-package home.seminar.proof.domain;
+package home.seminar.proof.domain.enumeration;
 
 public enum Role {
 

@@ -2,8 +2,8 @@ package home.seminar.proof.service.proof;
 
 import java.util.List;
 
-import home.seminar.proof.domain.Proof;
-import home.seminar.proof.domain.ProofForm;
+import home.seminar.proof.domain.entity.Proof;
+import home.seminar.proof.domain.form.ProofForm;
 
 public interface ProofService {
 
@@ -15,4 +15,5 @@ public interface ProofService {
 	void deleteProof(Long id);
 	List<Proof> findByParentId(Long id);
 	List<Proof> findByType(String type);
+	List<Proof> findByTitle(String title);
 }

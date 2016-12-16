@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-import home.seminar.proof.domain.Proof;
+import home.seminar.proof.domain.entity.Proof;
 
 public interface ProofRepository extends JpaRepository<Proof, Long> {
 
@@ -15,4 +15,6 @@ public interface ProofRepository extends JpaRepository<Proof, Long> {
 	List<Proof> findByParentIdOrderByTypeAsc(Long parentId);
 	
 	List<Proof> findByType(String type);
+	
+	List<Proof> findByTitle(String title);
 }

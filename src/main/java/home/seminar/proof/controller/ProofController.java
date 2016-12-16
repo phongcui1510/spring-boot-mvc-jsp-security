@@ -9,6 +9,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.Principal;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -22,7 +23,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -31,8 +34,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import home.seminar.proof.domain.Proof;
-import home.seminar.proof.domain.ProofForm;
+import home.seminar.proof.domain.CurrentUser;
+import home.seminar.proof.domain.entity.Proof;
+import home.seminar.proof.domain.form.ProofForm;
 import home.seminar.proof.service.proof.ProofService;
 
 @Controller
@@ -116,9 +120,30 @@ public class ProofController {
     }
     
     @RequestMapping(value = "/proof/list", method = RequestMethod.GET)
-	public ModelAndView listProof(HttpServletRequest request, HttpServletResponse response) {
+	public ModelAndView listProof(HttpServletRequest request, HttpServletResponse response, Principal principal) {
+    	CurrentUser currentUser = (CurrentUser)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    	LOGGER.info("Current User: " + currentUser.getUsername());
     	List<Proof> proofs = proofService.findAllRoot();
     	return new ModelAndView("proof_list", "proofs", proofs);
+    }
+    
+    @RequestMapping(value = "/proof/search", method = RequestMethod.GET)
+	public String redirectToSearchProofPage(HttpServletRequest request, HttpServletResponse response) {
+    	return "proof_search";
+    }
+    
+    @RequestMapping(value = "/proof/submitSearch", method = RequestMethod.POST)
+	public ModelAndView searchProof(HttpServletRequest request, HttpServletResponse response, @RequestParam("id") Long id, @RequestParam("title") String title) {
+    	if (id !=null && !id.equals(0)) {
+    		List<ProofForm> proofs = new ArrayList<ProofForm>();
+    		ProofForm proof = proofService.getProofById(id);
+    		proofs.add(proof);
+    		return new ModelAndView("proof_search_result", "proofs", proofs);
+    	} else if (!StringUtils.isEmpty(title)) {
+    		List<Proof> proofs = proofService.findByTitle(title);
+    		return new ModelAndView("proof_search_result", "proofs", proofs);
+    	}
+    	return null;
     }
     
     @RequestMapping(value = "/proof/edit", method = RequestMethod.GET)

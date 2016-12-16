@@ -28,8 +28,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import home.seminar.proof.domain.User;
-import home.seminar.proof.domain.UserCreateForm;
+import home.seminar.proof.domain.entity.User;
+import home.seminar.proof.domain.form.UserForm;
 import home.seminar.proof.domain.validator.UserCreateFormValidator;
 import home.seminar.proof.service.user.UserService;
 
@@ -66,7 +66,7 @@ public class UserController {
     @RequestMapping(value = "/user/create", method = RequestMethod.GET)
     public ModelAndView getUserCreatePage(HttpServletRequest request, HttpServletResponse response) {
         LOGGER.debug("Getting user create form");
-        UserCreateForm form = new UserCreateForm();
+        UserForm form = new UserForm();
         form.setAction(request.getContextPath()+"/user/create");
         form.setHeader("THÊM TÀI KHOẢN");
         return new ModelAndView("user_create", "user", form);
@@ -76,7 +76,7 @@ public class UserController {
     @RequestMapping(value = "/user/edit", method = RequestMethod.GET)
     public ModelAndView getUserEditPage(HttpServletRequest request, HttpServletResponse response, @RequestParam("id") Long id) {
     	Optional<User> user = userService.getUserById(id);
-    	UserCreateForm form = new UserCreateForm();
+    	UserForm form = new UserForm();
     	form.setHeader("CHỈNH SỬA TÀI KHOẢN");
     	if (user.isPresent()) {
     		BeanUtils.copyProperties(user.get(), form);
@@ -87,7 +87,7 @@ public class UserController {
     
     @PreAuthorize("hasAuthority('ADMIN')")
     @RequestMapping(value = "/user/edit", method = RequestMethod.POST)
-    public String editUser(HttpServletRequest request, HttpServletResponse response, @ModelAttribute("form") UserCreateForm form) {
+    public String editUser(HttpServletRequest request, HttpServletResponse response, @ModelAttribute("form") UserForm form) {
     	try {
     		userService.update(form);
     	} catch (Exception e) {
@@ -114,7 +114,7 @@ public class UserController {
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @RequestMapping(value = "/user/create", method = RequestMethod.POST)
-    public String handleUserCreateForm(@Valid @ModelAttribute("form") UserCreateForm form, BindingResult bindingResult) {
+    public String handleUserCreateForm(@Valid @ModelAttribute("form") UserForm form, BindingResult bindingResult) {
         LOGGER.info("Processing user create form={}, bindingResult={}", form, bindingResult);
         if (bindingResult.hasErrors()) {
             // failed validation

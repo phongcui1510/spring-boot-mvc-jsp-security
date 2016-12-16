@@ -3,8 +3,8 @@ package home.seminar.proof.service.user;
 import java.util.Collection;
 import java.util.Optional;
 
-import home.seminar.proof.domain.User;
-import home.seminar.proof.domain.UserCreateForm;
+import home.seminar.proof.domain.entity.User;
+import home.seminar.proof.domain.form.UserForm;
 
 public interface UserService {
 
@@ -14,10 +14,10 @@ public interface UserService {
 
     Collection<User> getAllUsers();
 
-    User create(UserCreateForm form);
+    User create(UserForm form);
     
     void deleteUser(Long id);
     
-    User update(UserCreateForm form);
+    User update(UserForm form);
 
 }

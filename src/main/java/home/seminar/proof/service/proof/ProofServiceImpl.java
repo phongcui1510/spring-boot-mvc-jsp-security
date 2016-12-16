@@ -7,8 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import home.seminar.proof.domain.Proof;
-import home.seminar.proof.domain.ProofForm;
+import home.seminar.proof.domain.entity.Proof;
+import home.seminar.proof.domain.form.ProofForm;
 import home.seminar.proof.repository.ProofRepository;
 
 @Service
@@ -104,5 +104,10 @@ public class ProofServiceImpl implements ProofService {
 	@Override
 	public List<Proof> findByType(String type) {
 		return repository.findByType(type);
+	}
+
+	@Override
+	public List<Proof> findByTitle(String title) {
+		return repository.findByTitle("%"+title+"%");
 	}
 }

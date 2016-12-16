@@ -2,6 +2,9 @@ package home.seminar.proof.domain;
 
 import org.springframework.security.core.authority.AuthorityUtils;
 
+import home.seminar.proof.domain.entity.User;
+import home.seminar.proof.domain.enumeration.Role;
+
 public class CurrentUser extends org.springframework.security.core.userdetails.User {
 
     private User user;

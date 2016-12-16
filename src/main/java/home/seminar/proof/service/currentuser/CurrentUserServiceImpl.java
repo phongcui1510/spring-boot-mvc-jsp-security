@@ -5,7 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import home.seminar.proof.domain.CurrentUser;
-import home.seminar.proof.domain.Role;
+import home.seminar.proof.domain.enumeration.Role;
 
 @Service
 public class CurrentUserServiceImpl implements CurrentUserService {

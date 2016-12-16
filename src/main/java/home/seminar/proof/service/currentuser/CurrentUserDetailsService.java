@@ -8,7 +8,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import home.seminar.proof.domain.CurrentUser;
-import home.seminar.proof.domain.User;
+import home.seminar.proof.domain.entity.User;
 import home.seminar.proof.service.user.UserService;
 
 @Service

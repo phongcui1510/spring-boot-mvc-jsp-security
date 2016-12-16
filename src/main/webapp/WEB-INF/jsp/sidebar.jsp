@@ -35,6 +35,9 @@
 		<c:if test="${currentUser != null &&  currentUser.role =='ADMIN'}">
 			<li><a href="${context}/proof/create"><b>Tạo minh chứng</b></a></li>
 		</c:if>
+		<c:if test="${currentUser != null &&  currentUser.role =='ADMIN'}">
+			<li><a href="${context}/proof/search"><b>Tìm minh chứng</b></a></li>
+		</c:if>
 		<li><a href="Admin_NCV.html"><b>Nhập chức vụ</b></a></li>
 	</ul>
 </div>

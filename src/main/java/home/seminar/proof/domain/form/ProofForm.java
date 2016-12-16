@@ -1,9 +1,11 @@
-package home.seminar.proof.domain;
+package home.seminar.proof.domain.form;
 
 import java.util.Date;
 import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
+
+import home.seminar.proof.domain.entity.Proof;
 
 public class ProofForm {
 

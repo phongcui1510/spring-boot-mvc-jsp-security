@@ -11,8 +11,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import home.seminar.proof.domain.User;
-import home.seminar.proof.domain.UserCreateForm;
+import home.seminar.proof.domain.entity.User;
+import home.seminar.proof.domain.form.UserForm;
 import home.seminar.proof.repository.UserRepository;
 
 @Service
@@ -45,7 +45,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User create(UserCreateForm form) {
+    public User create(UserForm form) {
         User user = new User();
         user.setDob(form.getDob());
         user.setUsername(form.getUsername());
@@ -63,7 +63,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public User update(UserCreateForm form) {
+	public User update(UserForm form) {
 		User user = userRepository.findOne(form.getId());
 		if (!StringUtils.isEmpty(form.getFullName())) {
 			user.setFullName(form.getFullName());
