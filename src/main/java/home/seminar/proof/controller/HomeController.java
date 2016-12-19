@@ -15,5 +15,29 @@ public class HomeController {
         LOGGER.debug("Getting home page");
         return "home";
     }
+    
+    @RequestMapping("/tintuc")
+    public String getTintucPage() {
+        LOGGER.debug("Getting home page");
+        return "tintuc";
+    }
+    
+    @RequestMapping("/thongbao")
+    public String getThongbaoPage() {
+        LOGGER.debug("Getting home page");
+        return "thongbao";
+    }
+    
+    @RequestMapping("/nhapchucvu")
+    public String getNhapchucvuPage() {
+        LOGGER.debug("Getting home page");
+        return "nhapchucvu";
+    }
+    
+    @RequestMapping("/gioithieu")
+    public String getGioithieuPage() {
+        LOGGER.debug("Getting home page");
+        return "gioithieu";
+    }
 
 }

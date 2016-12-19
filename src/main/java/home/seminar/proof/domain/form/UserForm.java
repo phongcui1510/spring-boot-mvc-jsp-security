@@ -126,14 +126,4 @@ public class UserForm {
         this.role = role;
     }
 
-    @Override
-    public String toString() {
-        return "UserCreateForm{" +
-                "email='" + email.replaceFirst("@.+", "@***") + '\'' +
-                ", password=***" + '\'' +
-                ", passwordRepeated=***" + '\'' +
-                ", role=" + role +
-                '}';
-    }
-
 }

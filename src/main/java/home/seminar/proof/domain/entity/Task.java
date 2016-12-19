@@ -21,20 +21,39 @@ public class Task {
     @Column(name = "id",nullable = false, updatable = false)
 	private Integer id;
 	
-	@ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name="assignerid")
+	@ManyToOne(fetch=FetchType.EAGER)
+    @JoinColumn(name="assigner")
 	private User assigner;
 	
-	@ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name="assigneeid")
+	@ManyToOne(fetch=FetchType.EAGER)
+    @JoinColumn(name="assignee")
 	private User assignee;
 	
 	@Column(name = "description")
 	private String description;
 	
+	@Column(name = "status")
+	private String status;
+	
 	@Column(name = "deadline")
 	private Date deadline;
 	
+	public String getStatus() {
+		return status;
+	}
+	public String getStatusDisplay() {
+		if (this.status != null && this.status.equalsIgnoreCase("NEW")) {
+			return "TẠO MỚI";
+		} else if (this.status != null && this.status.equalsIgnoreCase("INPROGRESS")) {
+			return "ĐANG LÀM";
+		} else if (this.status != null && this.status.equalsIgnoreCase("DONE")) {
+			return "HOÀN TẤT";
+		}
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
+	}
 	public Integer getId() {
 		return id;
 	}

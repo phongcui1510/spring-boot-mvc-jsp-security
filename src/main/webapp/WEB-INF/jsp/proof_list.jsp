@@ -18,6 +18,7 @@
 			<h1 align="center">DANH SÁCH MINH CHỨNG</h1>
 			<table>
 				<tr>
+					<th>ID</th>
 					<th>Tên</th>
 					<th>Ngày Bắt Đầu</th>
 					<th>Ngày Kết Thúc</th>
@@ -27,7 +28,8 @@
 					<th></th>
 				</tr>
 				<c:forEach items="${proofs}" var="proof">
-					<tr>
+					<tr <c:if test="${not empty proof.proofs}">style="color: green"</c:if>>
+						<td>${proof.id}</td>
 						<td>${proof.title}</td>
 						<td><fmt:formatDate pattern="yyyy-MM-dd" value="${proof.startDate}" /></td>
 						<td><fmt:formatDate pattern="yyyy-MM-dd" value="${proof.endDate}" /></td>
@@ -36,8 +38,17 @@
 						<td>${proof.type}</td>
 						<td>
 							<a href="${context}/proof/view?id=${proof.id}" style="color: blue">View</a>
-							<a href="${context}/proof/edit?id=${proof.id}" style="color: blue">Edit</a>
-							<a id="deleteProof${proof.id}" url="${context}/proof/delete?id=${proof.id}" style="color: blue; cursor: pointer;">Delete</a>
+							<c:if test="${proof.type == 'LEAF' &&  currentUser != null && currentUser.role =='USER3'}">
+								<a href="${context}/proof/edit?id=${proof.id}" style="color: blue">Edit</a>
+								<a id="deleteProof${proof.id}" url="${context}/proof/delete?id=${proof.id}" style="color: blue; cursor: pointer;">Delete</a>
+							</c:if>
+							<c:if test="${proof.type == 'LEAF' &&  currentUser != null && currentUser.role =='USER1'}">
+								<a href="${context}/proof/edit?id=${proof.id}" style="color: blue">Edit</a>
+							</c:if>
+							<c:if test="${proof.type == 'BRANCH' &&  currentUser != null && currentUser.role =='USER1'}">
+								<a href="${context}/proof/edit?id=${proof.id}" style="color: blue">Edit</a>
+								<a id="deleteProof${proof.id}" url="${context}/proof/delete?id=${proof.id}" style="color: blue; cursor: pointer;">Delete</a>
+							</c:if>
 						</td>
 					</tr>
 				</c:forEach>

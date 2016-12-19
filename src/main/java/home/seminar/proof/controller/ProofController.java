@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -19,6 +20,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
@@ -43,6 +45,8 @@ import home.seminar.proof.service.proof.ProofService;
 public class ProofController {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(ProofController.class);
+	
+	private final Charset UTF8_CHARSET = Charset.forName("UTF-8");
 
 	@Value("${uploadLocation}")
 	private String uploadLocation;
@@ -71,30 +75,36 @@ public class ProofController {
     @RequestMapping(value = "/proof/create", method = RequestMethod.POST)
 	public String submitCreateProof(HttpServletRequest request, HttpServletResponse response, @ModelAttribute("form") ProofForm form, Principal principal) {
     	LOGGER.info("Processing proof");
-    	String fullName = form.getFile().getOriginalFilename();
-    	String name = fullName.substring(0, fullName.length() - 4);
-    	String ext = fullName.substring(fullName.length() - 3, fullName.length());
-    	Path filePath = Paths.get(uploadLocation).resolve(fullName);
-    	try {
-			InputStream in = form.getFile().getInputStream();
-			File fileToSave = filePath.toFile();
-			if (fileToSave.exists()) {
-				int i = 1;
-				while(fileToSave.exists()) {
-					String temp = name + "-" + i;
-					i++;
-					fullName = temp+"."+ext;
-					fileToSave = Paths.get(uploadLocation).resolve(fullName).toFile();
-				}
-			}
-			Files.copy(in, filePath);
-			in.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-    	form.setFilePath(filePath.toString());
+    	if (form.getFile() != null && !StringUtils.isEmpty(form.getFile().getOriginalFilename())) {
+    		String fullName = form.getFile().getOriginalFilename();
+    		String name = fullName.substring(0, fullName.length() - 4);
+    		String ext = fullName.substring(fullName.length() - 3, fullName.length());
+    		Path filePath = Paths.get(uploadLocation).resolve(fullName);
+    		try {
+    			InputStream in = form.getFile().getInputStream();
+    			File fileToSave = filePath.toFile();
+    			if (fileToSave.exists()) {
+    				int i = 1;
+    				while(fileToSave.exists()) {
+    					String temp = name + "-" + i;
+    					i++;
+    					fullName = temp+"."+ext;
+    					fileToSave = Paths.get(uploadLocation).resolve(fullName).toFile();
+    				}
+    			}
+    			Files.copy(in, filePath);
+    			in.close();
+    		} catch (IOException e) {
+    			// TODO Auto-generated catch block
+    			e.printStackTrace();
+    		}
+    		form.setFilePath(filePath.toString());
+    	}
     	form.setCreatedBy(principal.getName());
+    	String decode = decodeUTF8(form.getDescription().getBytes());
+		form.setDescription(decode);
+		String decodeTitle = decodeUTF8(form.getTitle().getBytes());
+		form.setTitle(decodeTitle);
     	proofService.save(form);
         return "redirect:/home";
 	}
@@ -126,7 +136,15 @@ public class ProofController {
     	ProofForm form = proofService.getProofById(id);
     	if (form.getType().equalsIgnoreCase("BRANCH")) {
     		List<Proof> proofs = proofService.findByParentId(form.getId());
-    		return new ModelAndView("proof_list", "proofs", proofs);
+    		List<ProofForm> proofForm = new ArrayList<ProofForm>();
+    		for (Proof p : proofs) {
+    			ProofForm pf = new ProofForm();
+    			BeanUtils.copyProperties(p, pf);
+    			List<Proof> children = proofService.findByParentId(pf.getId());
+        		pf.setProofs(children);
+        		proofForm.add(pf);
+    		}
+    		return new ModelAndView("proof_list", "proofs", proofForm);
     	}
     	return new ModelAndView("proof_view", "proof", form);
     }
@@ -136,7 +154,15 @@ public class ProofController {
     	CurrentUser currentUser = (CurrentUser)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     	LOGGER.info("Current User: " + currentUser.getUsername());
     	List<Proof> proofs = proofService.findAllRoot();
-    	return new ModelAndView("proof_list", "proofs", proofs);
+    	List<ProofForm> form = new ArrayList<ProofForm>();
+    	for (Proof p : proofs) {
+    		ProofForm pf = new ProofForm();
+    		BeanUtils.copyProperties(p, pf);
+    		List<Proof> children = proofService.findByParentId(pf.getId());
+    		pf.setProofs(children);
+    		form.add(pf);
+    	}
+    	return new ModelAndView("proof_list", "proofs", form);
     }
     
     @RequestMapping(value = "/proof/search", method = RequestMethod.GET)
@@ -152,7 +178,8 @@ public class ProofController {
     		proofs.add(proof);
     		return new ModelAndView("proof_search_result", "proofs", proofs);
     	} else if (!StringUtils.isEmpty(title)) {
-    		List<Proof> proofs = proofService.findByTitle(title);
+    		String titleDecode = decodeUTF8(title.getBytes());
+    		List<Proof> proofs = proofService.findByTitle(titleDecode);
     		return new ModelAndView("proof_search_result", "proofs", proofs);
     	}
     	return null;
@@ -176,10 +203,22 @@ public class ProofController {
     @RequestMapping(value = "/proof/edit", method = RequestMethod.POST)
 	public String editProof(HttpServletRequest request, HttpServletResponse response, @ModelAttribute("form") ProofForm form) {
     	try {
+    		String decode = decodeUTF8(form.getDescription().getBytes());
+    		form.setDescription(decode);
+    		String decodeTitle = decodeUTF8(form.getTitle().getBytes());
+    		form.setTitle(decodeTitle);
     		proofService.update(form);
     	} catch (Exception e) {
     		LOGGER.error("Error when updating proof", e);
     	}
     	return "redirect:/home";
     }
+    
+    String decodeUTF8(byte[] bytes) {
+	    return new String(bytes, UTF8_CHARSET);
+	}
+
+	byte[] encodeUTF8(String string) {
+	    return string.getBytes(UTF8_CHARSET);
+	}
 }

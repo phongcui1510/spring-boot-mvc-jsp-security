@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=utf8" pageEncoding="utf8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -10,7 +11,7 @@
 <div class="nen">
 	<jsp:include page="sidebar.jsp"></jsp:include>
 	<div class="noidung" align="center">
-		<h1 align="center">${proof.header}</h1>
+		<h1 align="center">Tìm Kiêm</h1>
 		<form id="searchForm">
 			<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 			<input type="text" name="id" placeholder="ID" class="keyword"><br>

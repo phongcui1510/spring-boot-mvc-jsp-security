@@ -18,11 +18,30 @@
 		<h1 align="center">${task.header}</h1>
 		<form name="form" action="${task.action}" method="post">
 			<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-			<input type="hidden" name="id" value="${user.id}"><br>
-			<input type="text" name="username" placeholder="assigneeid" class="keyword" required value="${task.assignee}"><br>
-			<input type="password" name="password" placeholder="description" class="keyword" required value="${task.description}"><br>
+			<c:if test="${task.header == 'TẠO NHIỆM VỤ'}">
+<%-- 				<input type="text" name="assigneeid" placeholder="Giao việc cho ..." class="keyword" required value="${task.assignee.username}"><br> --%>
+				<label style="margin-left: -30%;" >Nguời nhận việc:</label><br>
+				<select name="assigneeid" required>
+					<c:forEach var="assignee" items="${task.assigneeLst}">
+						<option value="${assignee.id}">${assignee.username}</option>
+					</c:forEach>
+				</select><br/>
+			</c:if>
+			<c:if test="${task.header != 'TẠO NHIỆM VỤ'}">
+				<label style="margin-left: -30%;" >Nguời giao việc:</label><br>
+				<input type="text" class="keyword" required value="${task.assigner.username}"><br>
+				<input type="hidden" name="assignerid" value="${task.assigner.id}">
+				<input type="hidden" name="id" value="${task.id}">
+			</c:if>
+			<input type="text" name="description" placeholder="Mô Tả Công Việc" class="keyword" value="${task.description}"><br>
 			<label style="margin-left: -30%;" >Deadline:</label><br>
-			<input type="date" name="dob" value='<fmt:formatDate pattern="yyyy-MM-dd" value="${task.deadline}"/>'>
+			<input type="date" name="deadline" value='<fmt:formatDate pattern="yyyy-MM-dd" value="${task.deadline}"/>'><br/>
+			<label style="margin-left: -30%;" >Tình trạng:</label><br>
+			<select name="status">
+				<option value="NEW">TẠO MỚI</option>
+				<option value="INPROGRESS">ĐANG LÀM</option>
+				<option value="DONE">HOÀN TẤT</option>
+			</select>
 			<br> 
 			<input class="nutdn" type="submit" value="Lưu">
 		</form>
@@ -30,7 +49,7 @@
 </div>
 <script type="text/javascript">
 	$(document).ready(function(){
-		
+		$("select").val("${task.status}");
 	});
 </script>
 </body>

@@ -18,6 +18,10 @@
 			<h1 align="center">XEM MINH CHỨNG</h1>
 			<table>
 				<tr>
+					<td style="width: 30%">ID</td>
+					<td>${proof.id}</td>
+				</tr>
+				<tr>
 					<td style="width: 30%">Tên Minh Chứng</td>
 					<td>${proof.title}</td>
 				</tr>

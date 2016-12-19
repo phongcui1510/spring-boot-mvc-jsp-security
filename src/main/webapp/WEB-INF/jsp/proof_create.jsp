@@ -22,13 +22,17 @@
 				<input type="text" name="title" placeholder="Tên Minh Chứng" class="keyword" required value="${proof.title}"><br>
 				<textarea type="text" name="description" placeholder="Mô Tả" class="keyword" required cols="50" style="resize: none;">${proof.description}</textarea><br>
 				<label>Ngày Bắt Đầu</label><br>
-				<input type="date" name="startDate" placeholder="Ngày Bắt Đầu" class="keyword" value='<fmt:formatDate pattern="yyyy-MM-dd" value="${proof.startDate}"/>'><br>
+				<input type="date" name="startDate" placeholder="Ngày Bắt Đầu" value='<fmt:formatDate pattern="yyyy-MM-dd" value="${proof.startDate}"/>'><br>
 				<label>Ngày Kết Thúc</label><br>
-				<input type="date" name="endDate" placeholder="Ngày Kết Thúc" class="keyword" value='<fmt:formatDate pattern="yyyy-MM-dd" value="${proof.endDate}"/>'><br>
+				<input type="date" name="endDate" placeholder="Ngày Kết Thúc" value='<fmt:formatDate pattern="yyyy-MM-dd" value="${proof.endDate}"/>'><br>
 				<select name="type" class="keyword" required>
 					<option value="">Choose type</option>
-					<option value="BRANCH">Branch</option>
-					<option value="LEAF">Leaf</option>
+					<c:if test="${currentUser != null && currentUser.role == 'USER1'}">
+						<option value="BRANCH">Branch</option>
+					</c:if>
+					<c:if test="${currentUser != null && currentUser.role == 'USER3'}">
+						<option value="LEAF">Leaf</option>
+					</c:if>
 				</select><br>
 				<select name="parentId" class="keyword">
 					<option value="">Choose parent</option>

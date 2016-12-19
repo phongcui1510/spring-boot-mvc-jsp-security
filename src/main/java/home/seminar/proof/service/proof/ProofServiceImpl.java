@@ -108,6 +108,6 @@ public class ProofServiceImpl implements ProofService {
 
 	@Override
 	public List<Proof> findByTitle(String title) {
-		return repository.findByTitle("%"+title+"%");
+		return repository.findByTitleLikeIgnoreCase("%"+title+"%");
 	}
 }

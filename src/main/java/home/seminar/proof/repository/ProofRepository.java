@@ -9,12 +9,12 @@ import home.seminar.proof.domain.entity.Proof;
 
 public interface ProofRepository extends JpaRepository<Proof, Long> {
 
-	@Query("select p from Proof p where p.parentId is NULL or p.parentId = ''")
+	@Query("select p from Proof p where p.parentId is NULL or p.parentId = '' order by type asc")
 	List<Proof> findAllRoot();
 	
 	List<Proof> findByParentIdOrderByTypeAsc(Long parentId);
 	
 	List<Proof> findByType(String type);
 	
-	List<Proof> findByTitle(String title);
+	List<Proof> findByTitleLikeIgnoreCase(String title);
 }

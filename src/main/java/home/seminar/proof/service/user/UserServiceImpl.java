@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import home.seminar.proof.domain.entity.User;
+import home.seminar.proof.domain.enumeration.Role;
 import home.seminar.proof.domain.form.UserForm;
 import home.seminar.proof.repository.UserRepository;
 
@@ -87,6 +88,11 @@ public class UserServiceImpl implements UserService {
 			user.setDob(form.getDob());
 		}
 		return userRepository.save(user);
+	}
+
+	@Override
+	public Collection<User> findByRole(Role role) {
+		return userRepository.findByRole(role);
 	}
 
 }

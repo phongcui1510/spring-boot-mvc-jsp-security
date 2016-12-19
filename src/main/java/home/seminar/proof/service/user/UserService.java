@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.Optional;
 
 import home.seminar.proof.domain.entity.User;
+import home.seminar.proof.domain.enumeration.Role;
 import home.seminar.proof.domain.form.UserForm;
 
 public interface UserService {
@@ -13,6 +14,8 @@ public interface UserService {
     Optional<User> getUserByUsername(String username);
 
     Collection<User> getAllUsers();
+    
+    Collection<User> findByRole(Role role);
 
     User create(UserForm form);
     

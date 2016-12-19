@@ -29,8 +29,10 @@
 			<td>${proof.type}</td>
 			<td>
 				<a href="${context}/proof/view?id=${proof.id}" style="color: blue">View</a>
-				<a href="${context}/proof/edit?id=${proof.id}" style="color: blue">Edit</a>
-				<a id="deleteProof${proof.id}" url="${context}/proof/delete?id=${proof.id}" style="color: blue; cursor: pointer;">Delete</a>
+				<c:if test="${currentUser != null &&  (currentUser.role =='USER1' || currentUser.role =='USER3')}">
+					<a href="${context}/proof/edit?id=${proof.id}" style="color: blue">Edit</a>
+					<a id="deleteProof${proof.id}" url="${context}/proof/delete?id=${proof.id}" style="color: blue; cursor: pointer;">Delete</a>
+				</c:if>
 			</td>
 		</tr>
 	</c:forEach>
