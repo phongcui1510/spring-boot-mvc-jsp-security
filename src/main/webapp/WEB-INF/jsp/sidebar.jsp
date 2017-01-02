@@ -44,6 +44,5 @@
 		<c:if test="${currentUser != null &&  (currentUser.role =='USER3')}">
 			<li><a href="${context}/task/mytask"><b>Xem nhiệm vụ</b></a></li>
 		</c:if>
-		<li><a href="${context}/nhapchucvu"><b>Nhập chức vụ</b></a></li>
 	</ul>
 </div>

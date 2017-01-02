@@ -302,14 +302,14 @@
                     if (options.deletable || options.editable || options.addable || options.viewable) {
                         var selected = getSelectedItems();
                         if (options.editable) {
-                            if (selected.length <= 0 || selected.length > 1)
+                            if (selected.length <= 0 || selected.length > 1 || options.role == 'USER4')
                                 $(easyTree).find('.easy-tree-toolbar .edit > button').addClass('disabled');
                             else
                                 $(easyTree).find('.easy-tree-toolbar .edit > button').removeClass('disabled');
                         }
 
                         if (options.deletable) {
-                            if (selected.length <= 0 || selected.length > 1)
+                            if (selected.length <= 0 || selected.length > 1 || options.role == 'USER4')
                                 $(easyTree).find('.easy-tree-toolbar .remove > button').addClass('disabled');
                             else
                                 $(easyTree).find('.easy-tree-toolbar .remove > button').removeClass('disabled');
@@ -386,8 +386,13 @@
                         });
                     }
                 });
-            } else if (options.role != 'USER1' && options.role != 'USER3') {
-            	$('.easy-tree-toolbar').remove();
+            } else if (options.role == 'USER4') {
+            	$('.easy-tree-toolbar .create > button').unbind();
+            	$('.easy-tree-toolbar .edit > button').unbind();
+            	$('.easy-tree-toolbar .remove > button').unbind();
+            	$('.easy-tree-toolbar .create > button').addClass('disabled');
+            	$('.easy-tree-toolbar .edit > button').addClass('disabled');
+            	$('.easy-tree-toolbar .remove > button').addClass('disabled');
             }
             
          // Get selected items
