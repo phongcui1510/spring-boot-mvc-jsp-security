@@ -1,5 +1,6 @@
 package home.seminar.proof.service.proof;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -18,7 +19,7 @@ public class ProofServiceImpl implements ProofService {
 	private ProofRepository repository;
 	
 	@Override
-	public void save(ProofForm form) {
+	public Proof save(ProofForm form) {
 		Proof proof = new Proof();
 		proof.setTitle(form.getTitle());
 		proof.setDescription(form.getDescription());
@@ -29,7 +30,7 @@ public class ProofServiceImpl implements ProofService {
 		proof.setCreatedDate(new Date());
 		proof.setParentId(form.getParentId());
 		proof.setType(form.getType());
-		repository.save(proof);
+		return repository.save(proof);
 	}
 
 	@Override
@@ -92,18 +93,39 @@ public class ProofServiceImpl implements ProofService {
 	}
 
 	@Override
-	public List<Proof> findAllRoot() {
-		return repository.findAllRoot();
+	public List<ProofForm> findAllRoot() {
+		List<Proof> proofs = repository.findAllRoot();
+		List<ProofForm> formLst = new ArrayList<ProofForm>();
+		for (Proof p : proofs) {
+			ProofForm form = new ProofForm();
+			convertEntityToModel(form, p);
+			formLst.add(form);
+		}
+		return formLst;
 	}
 
 	@Override
-	public List<Proof> findByParentId(Long id) {
-		return repository.findByParentIdOrderByTypeAsc(id);
+	public List<ProofForm> findByParentId(Long id) {
+		List<Proof> proofs = repository.findByParentIdOrderByTypeAsc(id);
+		List<ProofForm> formLst = new ArrayList<ProofForm>();
+		for (Proof p : proofs) {
+			ProofForm form = new ProofForm();
+			convertEntityToModel(form, p);
+			formLst.add(form);
+		}
+		return formLst;
 	}
 
 	@Override
-	public List<Proof> findByType(String type) {
-		return repository.findByType(type);
+	public List<ProofForm> findByType(String type) {
+		List<Proof> proofs = repository.findByType(type);
+		List<ProofForm> formLst = new ArrayList<ProofForm>();
+		for (Proof p : proofs) {
+			ProofForm form = new ProofForm();
+			convertEntityToModel(form, p);
+			formLst.add(form);
+		}
+		return formLst;
 	}
 
 	@Override

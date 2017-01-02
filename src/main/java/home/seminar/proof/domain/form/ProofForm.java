@@ -24,7 +24,7 @@ public class ProofForm {
 	private String type;
 	private String action;
 	private String header;
-	private List<Proof> proofs;
+	private List<ProofForm> proofs;
 	
 	public String getType() {
 		return type;
@@ -32,10 +32,10 @@ public class ProofForm {
 	public void setType(String type) {
 		this.type = type;
 	}
-	public List<Proof> getProofs() {
+	public List<ProofForm> getProofs() {
 		return proofs;
 	}
-	public void setProofs(List<Proof> proofs) {
+	public void setProofs(List<ProofForm> proofs) {
 		this.proofs = proofs;
 	}
 	public String getHeader() {

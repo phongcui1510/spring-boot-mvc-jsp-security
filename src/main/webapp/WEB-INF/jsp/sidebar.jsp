@@ -32,7 +32,7 @@
 		<c:if test="${currentUser != null &&  (currentUser.role =='USER1' || currentUser.role =='USER2' || currentUser.role =='USER3' || currentUser.role =='USER4')}">
 			<li><a href="${context}/proof/list"><b>Xem minh chứng</b></a></li>
 		</c:if>
-		<c:if test="${currentUser != null &&  (currentUser.role =='USER1' || currentUser.role =='USER3')}">
+		<c:if test="${currentUser != null &&  (currentUser.role =='USER3')}">
 			<li><a href="${context}/proof/create"><b>Tạo minh chứng</b></a></li>
 		</c:if>
 		<c:if test="${currentUser != null &&  (currentUser.role =='USER1' || currentUser.role =='USER2' || currentUser.role =='USER3' || currentUser.role =='USER4')}">

@@ -6,57 +6,60 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="<c:url value="/public/css/bootstrap.min.css"/>" rel="stylesheet" type="text/css"/>
 <link href="<c:url value="/public/css/Admin.css"/>" rel="stylesheet" type="text/css"/>
+<link href="<c:url value="/public/css/easyTree.min.css"/>" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="<c:url value="/public/js/jquery.min.js"/>"></script>
+<script type="text/javascript" src="<c:url value="/public/js/bootstrap.min.js"/>"></script>
+<script type="text/javascript" src="<c:url value="/public/js/easyTree.js"/>"></script>
 <title>Proof List</title>
 </head>
 <body>
 <c:set var="context" value="${pageContext.request.contextPath}" />
 	<div class="nen">
 		<jsp:include page="sidebar.jsp"></jsp:include>
-		<div class="noidung" align="center">
+		<div class="noidung">
 			<h1 align="center">DANH SÁCH MINH CHỨNG</h1>
-			<table>
-				<tr>
-					<th>ID</th>
-					<th>Tên</th>
-					<th>Ngày Bắt Đầu</th>
-					<th>Ngày Kết Thúc</th>
-					<th>Ngày Tạo</th>
-					<th>Người Tạo</th>
-					<th>Type</th>
-					<th></th>
-				</tr>
-				<c:forEach items="${proofs}" var="proof">
-					<tr <c:if test="${not empty proof.proofs}">style="color: green"</c:if>>
-						<td>${proof.id}</td>
-						<td>${proof.title}</td>
-						<td><fmt:formatDate pattern="yyyy-MM-dd" value="${proof.startDate}" /></td>
-						<td><fmt:formatDate pattern="yyyy-MM-dd" value="${proof.endDate}" /></td>
-						<td><fmt:formatDate pattern="yyyy-MM-dd" value="${proof.createdDate}" /></td>
-						<td>${proof.createdBy}</td>
-						<td>${proof.type}</td>
-						<td>
-							<a href="${context}/proof/view?id=${proof.id}" style="color: blue">View</a>
-							<c:if test="${proof.type == 'LEAF' &&  currentUser != null && currentUser.role =='USER3'}">
-								<a href="${context}/proof/edit?id=${proof.id}" style="color: blue">Edit</a>
-								<a id="deleteProof${proof.id}" url="${context}/proof/delete?id=${proof.id}" style="color: blue; cursor: pointer;">Delete</a>
-							</c:if>
-							<c:if test="${proof.type == 'LEAF' &&  currentUser != null && currentUser.role =='USER1'}">
-								<a href="${context}/proof/edit?id=${proof.id}" style="color: blue">Edit</a>
-							</c:if>
-							<c:if test="${proof.type == 'BRANCH' &&  currentUser != null && currentUser.role =='USER1'}">
-								<a href="${context}/proof/edit?id=${proof.id}" style="color: blue">Edit</a>
-								<a id="deleteProof${proof.id}" url="${context}/proof/delete?id=${proof.id}" style="color: blue; cursor: pointer;">Delete</a>
-							</c:if>
-						</td>
-					</tr>
-				</c:forEach>
-			</table>
+			<div class="col-md-9">
+				<div class='easy-tree'>
+					<ul>
+						<c:forEach var="proof" items="${proofs}">
+							<c:set var="node" value="${proof}" scope="request"/>
+							<jsp:include page="node.jsp"/>
+						</c:forEach>
+					</ul>
+				</div>
+			</div>
 		</div>
 	</div>
 	<script type="text/javascript">
 		$(document).ready(function(){
+			$('.easy-tree').EasyTree(
+			        {
+			            addable: true,
+			            editable: true,
+			            deletable: true,
+			            viewable: true,
+			            i18n: {
+			            	deleteNull: 'Vui lòng chọn mục bạn muốn xóa',
+			                deleteConfirmation: 'Bạn có chắc muốn xóa？',
+			                confirmButtonLabel: 'OK',
+			                editNull: 'Vui lòng chọn mục bạn muốn chỉnh sửa',
+			                editMultiple: '',
+			                addMultiple: '',
+			                collapseTip: '',
+			                expandTip: '',
+			                selectTip: '',
+			                unselectTip: '',
+			                editTip: 'Chỉnh sửa',
+			                addTip: 'Thêm',
+			                deleteTip: 'Xóa',
+			                cancelButtonLabel: 'Cancel'
+			            },
+			            role: '${currentUser.role}'
+			        }
+			    );
+			
 			$("a[id^='deleteProof']").click(function(){
 				var r = confirm("Are you sure want to delete this proof?");
 				if (r == true) {
@@ -69,6 +72,7 @@
                     });
 				}
 			});
+			
 		});
 	</script>
 </body>

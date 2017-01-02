@@ -34,6 +34,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import home.seminar.proof.domain.CurrentUser;
@@ -62,18 +63,20 @@ public class ProofController {
     }
 	
     @RequestMapping(value = "/proof/create", method = RequestMethod.GET)
-	public ModelAndView createProof(HttpServletRequest request, HttpServletResponse response) {
+	public ModelAndView createProof(HttpServletRequest request, HttpServletResponse response, @RequestParam(required=false, name="parentId") Long parentId, @RequestParam(required=false, name="type") String type) {
     	LOGGER.info("Redirect to proof creation form");
     	ProofForm form = new ProofForm();
     	form.setAction(request.getContextPath()+"/proof/create");
     	form.setHeader("THÊM MINH CHỨNG");
-    	List<Proof> proofs = proofService.findByType("BRANCH");
+    	List<ProofForm> proofs = proofService.findByType("BRANCH");
     	form.setProofs(proofs);
+    	form.setParentId(parentId);
+    	form.setType(type);
         return new ModelAndView("proof_create", "proof", form);
 	}
     
     @RequestMapping(value = "/proof/create", method = RequestMethod.POST)
-	public String submitCreateProof(HttpServletRequest request, HttpServletResponse response, @ModelAttribute("form") ProofForm form, Principal principal) {
+	public @ResponseBody String submitCreateProof(HttpServletRequest request, HttpServletResponse response, @ModelAttribute("form") ProofForm form, Principal principal) throws IOException {
     	LOGGER.info("Processing proof");
     	if (form.getFile() != null && !StringUtils.isEmpty(form.getFile().getOriginalFilename())) {
     		String fullName = form.getFile().getOriginalFilename();
@@ -101,12 +104,17 @@ public class ProofController {
     		form.setFilePath(filePath.toString());
     	}
     	form.setCreatedBy(principal.getName());
-    	String decode = decodeUTF8(form.getDescription().getBytes());
-		form.setDescription(decode);
-		String decodeTitle = decodeUTF8(form.getTitle().getBytes());
-		form.setTitle(decodeTitle);
-    	proofService.save(form);
-        return "redirect:/home";
+//    	if (!StringUtils.isEmpty(form.getDescription())) {
+//	    	String decode = decodeUTF8(form.getDescription().getBytes());
+//			form.setDescription(decode);
+//    	}
+//		String decodeTitle = decodeUTF8(form.getTitle().getBytes());
+//		form.setTitle(decodeTitle);
+    	Proof savedProof = proofService.save(form);
+    	if (form.getType().equalsIgnoreCase("LEAF")) {
+    		response.sendRedirect(request.getContextPath()+"/proof/list");
+    	}
+        return savedProof.getId().toString();
 	}
     
     @RequestMapping(value="/proof/download", method= RequestMethod.GET, produces=MediaType.APPLICATION_OCTET_STREAM_VALUE)
@@ -135,12 +143,12 @@ public class ProofController {
 	public ModelAndView viewProof(HttpServletRequest request, HttpServletResponse response, @RequestParam("id") Long id) {
     	ProofForm form = proofService.getProofById(id);
     	if (form.getType().equalsIgnoreCase("BRANCH")) {
-    		List<Proof> proofs = proofService.findByParentId(form.getId());
+    		List<ProofForm> proofs = proofService.findByParentId(form.getId());
     		List<ProofForm> proofForm = new ArrayList<ProofForm>();
-    		for (Proof p : proofs) {
+    		for (ProofForm p : proofs) {
     			ProofForm pf = new ProofForm();
     			BeanUtils.copyProperties(p, pf);
-    			List<Proof> children = proofService.findByParentId(pf.getId());
+    			List<ProofForm> children = proofService.findByParentId(pf.getId());
         		pf.setProofs(children);
         		proofForm.add(pf);
     		}
@@ -153,16 +161,19 @@ public class ProofController {
 	public ModelAndView listProof(HttpServletRequest request, HttpServletResponse response, Principal principal) {
     	CurrentUser currentUser = (CurrentUser)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     	LOGGER.info("Current User: " + currentUser.getUsername());
-    	List<Proof> proofs = proofService.findAllRoot();
-    	List<ProofForm> form = new ArrayList<ProofForm>();
-    	for (Proof p : proofs) {
-    		ProofForm pf = new ProofForm();
-    		BeanUtils.copyProperties(p, pf);
-    		List<Proof> children = proofService.findByParentId(pf.getId());
-    		pf.setProofs(children);
-    		form.add(pf);
+    	List<ProofForm> proofs = proofService.findAllRoot();
+    	findChildren(proofs);
+    	return new ModelAndView("proof_list", "proofs", proofs);
+    }
+    
+    private void findChildren (List<ProofForm> lst) {
+    	for (ProofForm p : lst) {
+    		if (p.getType().equalsIgnoreCase("BRANCH")) {
+    			List<ProofForm> children = proofService.findByParentId(p.getId());
+    			p.setProofs(children);
+    			findChildren(children);
+    		}
     	}
-    	return new ModelAndView("proof_list", "proofs", form);
     }
     
     @RequestMapping(value = "/proof/search", method = RequestMethod.GET)
@@ -190,7 +201,7 @@ public class ProofController {
     	ProofForm form = proofService.getProofById(id);
     	form.setAction(request.getContextPath()+"/proof/edit");
     	form.setHeader("CHỈNH SỬA MINH CHỨNG");
-    	List<Proof> proofs = proofService.findByType("BRANCH");
+    	List<ProofForm> proofs = proofService.findByType("BRANCH");
     	form.setProofs(proofs);
     	return new ModelAndView("proof_create", "proof", form);
     }
@@ -203,10 +214,14 @@ public class ProofController {
     @RequestMapping(value = "/proof/edit", method = RequestMethod.POST)
 	public String editProof(HttpServletRequest request, HttpServletResponse response, @ModelAttribute("form") ProofForm form) {
     	try {
-    		String decode = decodeUTF8(form.getDescription().getBytes());
-    		form.setDescription(decode);
-    		String decodeTitle = decodeUTF8(form.getTitle().getBytes());
-    		form.setTitle(decodeTitle);
+//    		if (!StringUtils.isEmpty(form.getDescription())) {
+//    			String decode = decodeUTF8(form.getDescription().getBytes());
+//    			form.setDescription(decode);
+//    		}
+//    		if (!StringUtils.isEmpty(form.getTitle())) {
+//    			String decodeTitle = decodeUTF8(form.getTitle().getBytes());
+//    			form.setTitle(decodeTitle);
+//    		}
     		proofService.update(form);
     	} catch (Exception e) {
     		LOGGER.error("Error when updating proof", e);

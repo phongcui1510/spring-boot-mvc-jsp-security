@@ -7,13 +7,13 @@ import home.seminar.proof.domain.form.ProofForm;
 
 public interface ProofService {
 
-	public void save(ProofForm proof);
+	public Proof save(ProofForm proof);
 	public ProofForm getProofById(Long id);
 	Proof update(ProofForm proof);
 	List<Proof> findAll();
-	List<Proof> findAllRoot();
+	List<ProofForm> findAllRoot();
 	void deleteProof(Long id);
-	List<Proof> findByParentId(Long id);
-	List<Proof> findByType(String type);
+	List<ProofForm> findByParentId(Long id);
+	List<ProofForm> findByType(String type);
 	List<Proof> findByTitle(String title);
 }

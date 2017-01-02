@@ -47,7 +47,8 @@
 	</div>
 	<script type="text/javascript">
 		$(document).ready(function(){
-			$("select").val("${proof.parentId}");
+			$("select[name='parentId']").val("${proof.parentId}");
+			$("select[name='type']").val("${proof.type}");
 		});
 	</script>
 </body>
