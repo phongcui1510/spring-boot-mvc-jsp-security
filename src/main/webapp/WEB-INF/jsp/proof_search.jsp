@@ -19,7 +19,7 @@
 			<form id="searchForm">
 				<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 				<input type="text" name="id" placeholder="ID" class="keyword"><br>
-				<input type="text" name="title" placeholder="Tên Minh Chứng" class="keyword"><br>
+				<input type="text" name="title" placeholder="Tên, mô tả, người tạo, ..." class="keyword"><br>
 				<input class="nutdn" type="button" value="Tìm" id="submitSearch">
 			</form>
 			<br/>

@@ -70,92 +70,97 @@
             if (options.addable) {
                 $(easyTree).find('.easy-tree-toolbar').append('<div class="create"><button class="btn btn-default btn-sm btn-success"><span class="glyphicon glyphicon-plus"></span></button></div> ');
                 $(easyTree).find('.easy-tree-toolbar .create > button').attr('title', options.i18n.addTip).click(function () {
-                    var createBlock = $(easyTree).find('.easy-tree-toolbar .create');
-                    $(createBlock).append(createInput);
-                    $(createInput).find('input').focus();
-                    $(createInput).find('.confirm').text(options.i18n.confirmButtonLabel);
-                    $(createInput).find('.confirm').click(function () {
-                        if ($(createInput).find('input').val() === '')
-                            return;
-                        var selected = getSelectedItems();
-                        //modify
-                        var name = $(this).parent().prev();
-        				var data = {
-            					title : $(name).val(),
-            					description : "Create branch",
-            					type : "BRANCH",
-            					parentId: $(selected).attr('id')
-            				};
-        				var idAttr = '';
-        				$.ajax({
-                            url: 'create',
-                            method: "POST",
-                            data: data,
-                            success: function (response) {
-                            	var item = $('<li id='+response+'><span><span class="glyphicon glyphicon-folder-open"></span><a href="javascript: void(0);">' + $(createInput).find('input').val() + '</a> </span></li>');
-                                $(item).find(' > span > span').attr('title', options.i18n.collapseTip);
-                                $(item).find(' > span > a').attr('title', options.i18n.selectTip);
-                                if (selected.length <= 0) {
-                                    $(easyTree).find(' > ul').append($(item));
-                                } else if (selected.length > 1) {
-                                    $(easyTree).prepend(warningAlert);
-                                    $(easyTree).find('.alert .alert-content').text(options.i18n.addMultiple);
-                                } else {
-                                    if ($(selected).hasClass('parent_li')) {
-                                        $(selected).find(' > ul').append(item);
-                                    } else {
-                                        $(selected).addClass('parent_li').find(' > span > span').addClass('glyphicon-folder-open').removeClass('glyphicon-file');
-                                        $(selected).append($('<ul></ul>')).find(' > ul').append(item);
-                                    }
-                                }
-                                $(createInput).find('input').val('');
-                                if (options.selectable) {
-                                    $(item).find(' > span > a').attr('title', options.i18n.selectTip);
-                                    $(item).find(' > span > a').click(function (e) {
-                                        var li = $(this).parent().parent();
-                                        if (li.hasClass('li_selected')) {
-                                            $(this).attr('title', options.i18n.selectTip);
-                                            $(li).removeClass('li_selected');
-                                        }
-                                        else {
-                                            $(easyTree).find('li.li_selected').removeClass('li_selected');
-                                            $(this).attr('title', options.i18n.unselectTip);
-                                            $(li).addClass('li_selected');
-                                        }
-
-                                        if (options.deletable || options.editable || options.addable) {
-                                            var selected = getSelectedItems();
-                                            if (options.editable) {
-                                                if (selected.length <= 0 || selected.length > 1)
-                                                    $(easyTree).find('.easy-tree-toolbar .edit > button').addClass('disabled');
-                                                else
-                                                    $(easyTree).find('.easy-tree-toolbar .edit > button').removeClass('disabled');
-                                            }
-
-                                            if (options.deletable) {
-                                                if (selected.length <= 0 || selected.length > 1)
-                                                    $(easyTree).find('.easy-tree-toolbar .remove > button').addClass('disabled');
-                                                else
-                                                    $(easyTree).find('.easy-tree-toolbar .remove > button').removeClass('disabled');
-                                            }
-
-                                        }
-
-                                        e.stopPropagation();
-
-                                    });
-                                }
-                                $(createInput).remove();
-                            }
-                        });
-        				//end modify
-        				
-                        
-                    });
-                    $(createInput).find('.cancel').text(options.i18n.cancelButtonLabel);
-                    $(createInput).find('.cancel').click(function () {
-                        $(createInput).remove();
-                    });
+                	var selected = getSelectedItems();
+                	if ($(selected).hasClass('parent_li')) {
+	                    var createBlock = $(easyTree).find('.easy-tree-toolbar .create');
+	                    $(createBlock).append(createInput);
+	                    $(createInput).find('input').focus();
+	                    $(createInput).find('.confirm').text(options.i18n.confirmButtonLabel);
+	                    $(createInput).find('.confirm').click(function () {
+	                        if ($(createInput).find('input').val() === '')
+	                            return;
+//	                        var selected = getSelectedItems();
+	                        //modify
+	                        var name = $(this).parent().prev();
+	        				var data = {
+	            					title : $(name).val(),
+	            					description : "Create branch",
+	            					type : "BRANCH",
+	            					parentId: $(selected).attr('id')
+	            				};
+	        				var idAttr = '';
+	        				$.ajax({
+	                            url: 'create',
+	                            method: "POST",
+	                            data: data,
+	                            success: function (response) {
+	                            	var item = $('<li id='+response+'><span><span class="glyphicon glyphicon-folder-open"></span><a href="javascript: void(0);">' + $(createInput).find('input').val() + '</a> </span></li>');
+	                                $(item).find(' > span > span').attr('title', options.i18n.collapseTip);
+	                                $(item).find(' > span > a').attr('title', options.i18n.selectTip);
+	                                if (selected.length <= 0) {
+	                                    $(easyTree).find(' > ul').append($(item));
+	                                } else if (selected.length > 1) {
+	                                    $(easyTree).prepend(warningAlert);
+	                                    $(easyTree).find('.alert .alert-content').text(options.i18n.addMultiple);
+	                                } else {
+	                                    if ($(selected).hasClass('parent_li')) {
+	                                        $(selected).find(' > ul').append(item);
+	                                    } else {
+	                                        $(selected).addClass('parent_li').find(' > span > span').addClass('glyphicon-folder-open').removeClass('glyphicon-file');
+	                                        $(selected).append($('<ul></ul>')).find(' > ul').append(item);
+	                                    }
+	                                }
+	                                $(createInput).find('input').val('');
+	                                if (options.selectable) {
+	                                    $(item).find(' > span > a').attr('title', options.i18n.selectTip);
+	                                    $(item).find(' > span > a').click(function (e) {
+	                                        var li = $(this).parent().parent();
+	                                        if (li.hasClass('li_selected')) {
+	                                            $(this).attr('title', options.i18n.selectTip);
+	                                            $(li).removeClass('li_selected');
+	                                        }
+	                                        else {
+	                                            $(easyTree).find('li.li_selected').removeClass('li_selected');
+	                                            $(this).attr('title', options.i18n.unselectTip);
+	                                            $(li).addClass('li_selected');
+	                                        }
+	
+	                                        if (options.deletable || options.editable || options.addable) {
+	                                            var selected = getSelectedItems();
+	                                            if (options.editable) {
+	                                                if (selected.length <= 0 || selected.length > 1)
+	                                                    $(easyTree).find('.easy-tree-toolbar .edit > button').addClass('disabled');
+	                                                else
+	                                                    $(easyTree).find('.easy-tree-toolbar .edit > button').removeClass('disabled');
+	                                            }
+	
+	                                            if (options.deletable) {
+	                                                if (selected.length <= 0 || selected.length > 1)
+	                                                    $(easyTree).find('.easy-tree-toolbar .remove > button').addClass('disabled');
+	                                                else
+	                                                    $(easyTree).find('.easy-tree-toolbar .remove > button').removeClass('disabled');
+	                                            }
+	
+	                                        }
+	
+	                                        e.stopPropagation();
+	
+	                                    });
+	                                }
+	                                $(createInput).remove();
+	                            }
+	                        });
+	        				//end modify
+	        				
+	                        
+	                    });
+	                    $(createInput).find('.cancel').text(options.i18n.cancelButtonLabel);
+	                    $(createInput).find('.cancel').click(function () {
+	                        $(createInput).remove();
+	                    });
+                	} else {
+                		alert("Vui lòng chọn thư mục");
+                	}
                 });
             }
 
@@ -174,7 +179,7 @@
                         $(easyTree).prepend(warningAlert);
                         $(easyTree).find('.alert .alert-content').html(options.i18n.editMultiple);
                     }
-                    else {
+                    else if ($(selected).hasClass('parent_li')) {
                         var value = $(selected).find(' > span > a').text();
                         $(selected).find(' > span > a').hide();
                         $(selected).find(' > span').append('<input type="text" class="easy-tree-editor">');
@@ -220,29 +225,29 @@
                     if (selected.length <= 0) {
                         $(easyTree).prepend(warningAlert);
                         $(easyTree).find('.alert .alert-content').html(options.i18n.deleteNull);
-                    } else {
+                    } else if ($(selected).hasClass('parent_li')) {
                         $(easyTree).prepend(dangerAlert);
                         $(easyTree).find('.alert .alert-content').html(options.i18n.deleteConfirmation)
                             .append('<a style="margin-left: 10px;" class="btn btn-default btn-danger confirm"></a>')
                             .find('.confirm').html(options.i18n.confirmButtonLabel);
                         $(easyTree).find('.alert .alert-content .confirm').on('click', function () {
-                        	//modify
-            				$.ajax({
-                                url: 'delete',
-                                method: "GET",
-                                data: {id: $(selected).attr('id')},
-                                success: function (response) {
-                                }
-                            });
-            				//end modify
-            				
-                            $(selected).find(' ul ').remove();
-                            if($(selected).parent('ul').find(' > li').length <= 1) {
+                    		//modify
+                    		$.ajax({
+                    			url: 'delete',
+                    			method: "GET",
+                    			data: {id: $(selected).attr('id')},
+                    			success: function (response) {
+                    			}
+                    		});
+                    		//end modify
+                    		
+                    		$(selected).find(' ul ').remove();
+                    		if($(selected).parent('ul').find(' > li').length <= 1) {
 //                                $(selected).parents('li').removeClass('parent_li').find(' > span > span').removeClass('glyphicon-folder-open').addClass('glyphicon-file');
 //                                $(selected).parent('ul').remove();
-                            }
-                            $(selected).remove();
-                            $(dangerAlert).remove();
+                    		}
+                    		$(selected).remove();
+                    		$(dangerAlert).remove();
                         });
                     }
                 });
@@ -254,8 +259,8 @@
                 $(easyTree).find('.easy-tree-toolbar .view > button').click(function () {
                     var selected = getSelectedItems();
                     if (selected.length <= 0) {
-                        $(easyTree).prepend(warningAlert);
-                        $(easyTree).find('.alert .alert-content').html(options.i18n.deleteNull);
+//                        $(easyTree).prepend(warningAlert);
+//                        $(easyTree).find('.alert .alert-content').html(options.i18n.deleteNull);
                     } else {
                     	if ($(selected).hasClass('parent_li')) {
                     		return;
@@ -282,6 +287,11 @@
                         .removeClass('glyphicon-folder-close');
                 }
                 e.stopPropagation();
+            });
+            
+            $(easyTree).delegate('span.glyphicon-file', 'click', function (e) {
+            	var parent = $(this).parent().parent();
+            	window.open('/ProofMgmSystem/proof/view?id='+$(parent).attr('id'));
             });
 
             // selectable, only single select
@@ -329,7 +339,7 @@
             }
 
             //modified
-            if (options.role != 'USER1' && options.role == 'USER3') {
+            if (options.role == 'USER3') {
             	$('.easy-tree-toolbar .create > button').unbind();
             	$('.easy-tree-toolbar .edit > button').unbind();
             	$('.easy-tree-toolbar .remove > button').unbind();
@@ -393,6 +403,10 @@
             	$('.easy-tree-toolbar .create > button').addClass('disabled');
             	$('.easy-tree-toolbar .edit > button').addClass('disabled');
             	$('.easy-tree-toolbar .remove > button').addClass('disabled');
+            } else if (options.role != 'USER1' && options.role != 'USER3' && options.role != 'USER4') {
+            	$('.easy-tree-toolbar .create > button').unbind();
+            	$('.easy-tree-toolbar .edit > button').unbind();
+            	$('.easy-tree-toolbar .remove > button').unbind();
             }
             
          // Get selected items
@@ -402,7 +416,8 @@
             
             $('li.parent_li').each(function(index, value){
             	if ($(value).find('ul > li').length > 0) {
-            		$(value).find('span[title]').css('background-color','#99ccff');
+//            		alert($(value).attr("id"));
+            		$(this).find('a').first().css('color','#ff8080');
             	}
             });
         });

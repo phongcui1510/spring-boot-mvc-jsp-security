@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link href="<c:url value="/public/css/bootstrap.min.css"/>" rel="stylesheet" type="text/css"/>
 <link href="<c:url value="/public/css/Admin.css"/>" rel="stylesheet" type="text/css"/>
-<link href="<c:url value="/public/css/easyTree.min.css"/>" rel="stylesheet" type="text/css"/>
+<link href="<c:url value="/public/css/easyTree.css"/>" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="<c:url value="/public/js/jquery.min.js"/>"></script>
 <script type="text/javascript" src="<c:url value="/public/js/bootstrap.min.js"/>"></script>
 <script type="text/javascript" src="<c:url value="/public/js/easyTree.js"/>"></script>

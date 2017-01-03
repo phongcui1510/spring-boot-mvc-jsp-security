@@ -16,4 +16,5 @@ public interface ProofService {
 	List<ProofForm> findByParentId(Long id);
 	List<ProofForm> findByType(String type);
 	List<Proof> findByTitle(String title);
+	List<ProofForm> findByAnything(String keyword);
 }

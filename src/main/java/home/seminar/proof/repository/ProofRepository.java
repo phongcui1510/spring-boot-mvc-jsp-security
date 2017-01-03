@@ -16,5 +16,8 @@ public interface ProofRepository extends JpaRepository<Proof, Long> {
 	
 	List<Proof> findByType(String type);
 	
+	@Query("select p from Proof p where p.title like ?1 or p.description like ?1 or createdBy like ?1 or filePath like ?1")
+	List<Proof> findByAnything(String keyword);
+	
 	List<Proof> findByTitleLikeIgnoreCase(String title);
 }

@@ -2,7 +2,7 @@
 .easy-tree {
     min-height: 20px;
     margin-bottom: 20px;
-    background-color: #e56155;
+/*     background-color: #e56155; */
     color: #fff;
     border: none;
     border-top: none;
@@ -28,7 +28,7 @@
 }
 
 .easy-tree li::before {
-    border-left: 1px solid #fff;
+    border-left: 1px solid #0000ff;
     bottom: 50px;
     height: 100%;
     top: 0;
@@ -36,24 +36,28 @@
 }
 
 .easy-tree li::after {
-    border-top: 1px solid #fff;
+    border-top: 1px solid #0000ff;
     height: 20px;
     top: 30px;
     width: 35px
 }
 
 .easy-tree li > span {
-    border: 1px solid #fff;
+    border: 1px solid #4d94ff;
     border-radius: 3px;
     display: inline-block;
     padding: 5px;
-    text-decoration: none
+    text-decoration: none;
+    background-color: #4d94ff
 }
 
 .easy-tree li.parent_li > span {
     cursor: pointer
 }
 
+.easy-tree span.glyphicon-file {
+    cursor: pointer
+}
 
 .easy-tree > ul > li::before, .easy-tree > ul > li::after {
     border: 0
@@ -64,7 +68,7 @@
 }
 
 .easy-tree li.parent_li > span:hover, .easy-tree li.parent_li > span:hover + ul li span {
-    background: #ff6c60;
+    background: #3385ff;
     color: #fff;
 }
 
@@ -84,16 +88,16 @@
 
 .easy-tree li.li_selected > span, .easy-tree li.li_selected > span > a {
     background: #e5e2e1;
-    color: #e56155;
+    color: #3385ff;
 }
 
 .easy-tree li.li_selected > span:hover, .easy-tree li.li_selected > span:hover > a {
-    background: #fafafa;
-    color: #ff6c60;
+    background: #0066ff;
+    color: #3385ff;
 }
 
 .easy-tree .easy-tree-toolbar {
-    background-color: #fff;
+    background-color: #cce0ff;
 }
 
 .easy-tree .easy-tree-toolbar > div {

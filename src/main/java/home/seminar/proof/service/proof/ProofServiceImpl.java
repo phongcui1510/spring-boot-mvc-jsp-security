@@ -132,4 +132,16 @@ public class ProofServiceImpl implements ProofService {
 	public List<Proof> findByTitle(String title) {
 		return repository.findByTitleLikeIgnoreCase("%"+title+"%");
 	}
+
+	@Override
+	public List<ProofForm> findByAnything(String keyword) {
+		List<Proof> proofs = repository.findByAnything("%"+keyword+"%");
+		List<ProofForm> formLst = new ArrayList<ProofForm>();
+		for (Proof p : proofs) {
+			ProofForm form = new ProofForm();
+			convertEntityToModel(form, p);
+			formLst.add(form);
+		}
+		return formLst;
+	}
 }

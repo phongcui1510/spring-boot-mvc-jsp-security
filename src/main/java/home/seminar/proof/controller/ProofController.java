@@ -189,8 +189,8 @@ public class ProofController {
     		proofs.add(proof);
     		return new ModelAndView("proof_search_result", "proofs", proofs);
     	} else if (!StringUtils.isEmpty(title)) {
-    		String titleDecode = decodeUTF8(title.getBytes());
-    		List<Proof> proofs = proofService.findByTitle(titleDecode);
+//    		String titleDecode = decodeUTF8(title.getBytes());
+    		List<ProofForm> proofs = proofService.findByAnything(title);
     		return new ModelAndView("proof_search_result", "proofs", proofs);
     	}
     	return null;
